@@ -1,6 +1,6 @@
 import MENU from '../constants/menu';
-import { ERROR_MESSAGE } from '../constants/message';
 import QUANTITY from '../constants/quantity';
+import { ERROR_MESSAGE } from '../constants/message';
 
 class Order {
   #order = new Map();
@@ -18,7 +18,7 @@ class Order {
   addOrder(menus) {
     this.#validateOrder(menus);
     menus.forEach(([menu, quantity]) => {
-      this.#validateDuplicateMenu(menu);
+      this.#validateDuplicatedMenu(menu);
       this.#order.set(menu, quantity);
     });
   }
@@ -39,35 +39,40 @@ class Order {
       });
   }
 
-  #validateDuplicateMenu(menu) {
+  #validateDuplicatedMenu(menu) {
     if (this.#order.has(menu)) {
       throw new Error(ERROR_MESSAGE.INVALID_ORDER);
     }
   }
 
   #validateOrder(menus) {
+    this.#validateMenuExist(menus);
     this.#validateQuantity(menus);
-    this.#validateOnlyDrink(menus);
+    this.#validateOrderedOnlyDrink(menus);
+  }
 
-    menus.forEach(([menu, quantity]) => {
-      const isExistsMenu = Object.values(MENU)
-        .some((category) => (
-          category.some((menuData) => menuData.name === menu)
-        ));
+  #validateMenuExist(menus) {
+    menus.forEach((menuData) => {
+      const menu = menuData[0];
+      const isExistsMenu = Object.prototype.hasOwnProperty.call(this.#menuDatas, menu);
 
-      if (!isExistsMenu || quantity < 1) throw new Error(ERROR_MESSAGE.INVALID_ORDER);
+      if (!isExistsMenu) throw new Error(ERROR_MESSAGE.INVALID_ORDER);
     });
   }
 
   #validateQuantity(menus) {
-    const totalQuantity = menus.reduce((total, menu) => (
-      (typeof total === 'object' ? Number(total[1]) : total) + Number(menu[1])
-    ));
+    const quantities = menus.map(order => {
+      const quantity = Number(order[1]);
+      if(quantity < QUANTITY.MINIMUM_ORDER) throw new Error(ERROR_MESSAGE.INVALID_ORDER);
+      return quantity;
+    });
+
+    const totalQuantity = quantities.reduce((total, quantity) => total + quantity, 0);
 
     if (totalQuantity > QUANTITY.MAXIMUM_ORDER) throw new Error(ERROR_MESSAGE.OVER_QUANTITY);
   }
 
-  #validateOnlyDrink(menus) {
+  #validateOrderedOnlyDrink(menus) {
     const orderCategory = new Set();
     const CATEGORY_DRINK = 'DRINK';
 
@@ -84,14 +89,10 @@ class Order {
   }
 
   #findCategory(menu) {
-    const menuCategory = Object.entries(MENU)
-      .find((category) => {
-        const categoryMenus = category[1];
-        return categoryMenus.some((menuData) => menuData.name === menu);
-      });
+    const menuData = this.#menuDatas[menu];
 
-    if (menuCategory) {
-      return menuCategory[0];
+    if (menuData) {
+      return menuData.category;
     }
   }
 }
