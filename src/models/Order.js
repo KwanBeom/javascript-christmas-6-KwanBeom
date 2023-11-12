@@ -30,6 +30,21 @@ class Order {
       ), 0);
   }
 
+  mainMenuCount() {
+    return this.#calculateCategoryCount('MAIN');
+  }
+  
+  dessertCount() {
+    return this.#calculateCategoryCount('DESSERT');
+  }
+
+  #calculateCategoryCount(category) {
+    return Array.from(this.#order)
+      .reduce((count, [menu, quantity]) => (
+        count + (this.#menuDatas[menu].category === category) * quantity
+      ), 0);
+  }
+
   #initializeMenuDatas() {
     Object.entries(MENU)
       .forEach(([category, categoryMenus]) => {
