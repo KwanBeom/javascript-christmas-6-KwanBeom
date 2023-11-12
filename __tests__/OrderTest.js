@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import Order from '../src/models/Order';
 
 describe('메뉴 주문 시', () => {
@@ -23,7 +24,10 @@ describe('메뉴 주문 시', () => {
 
   it('주문 수량이 올바르지 않으면 예외가 발생한다.', () => {
     const order = new Order();
-    const menu = [['양송이수프', '0']];
+    const menu = [
+      ['양송이수프', '0'],
+      ['제로콜라', '1'],
+    ];
     expect(() => order.addOrder(menu)).toThrow('[ERROR]');
   });
 
@@ -49,5 +53,39 @@ describe('메뉴 주문 시', () => {
     const order = new Order();
     const menu = [['제로콜라', '1']];
     expect(() => order.addOrder(menu)).toThrow('[ERROR]');
+  });
+});
+
+describe('주문 금액 계산 테스트', () => {
+  it.each([
+    [
+      [
+        ['티본스테이크', '1'],
+        ['양송이수프', '2'],
+        ['제로콜라', '1'],
+      ],
+      55000 + 6000 * 2 + 3000,
+    ],
+    [
+      [
+        ['해산물파스타', '2'],
+        ['양송이수프', '2'],
+        ['제로콜라', '1'],
+        ['아이스크림', '1'],
+        ['초코케이크', '1'],
+      ],
+      35000 * 2 + 6000 * 2 + 3000 + 5000 + 15000,
+    ],
+  ])('주문을 추가하면 총 주문 금액이 정확하게 계산되어야 한다.', (mockInput, expected) => {
+    const order = new Order();
+
+    // Given
+    order.addOrder(mockInput);
+
+    // When
+    const result = order.totalPrice();
+
+    // Then
+    expect(result).toBe(expected);
   });
 });
