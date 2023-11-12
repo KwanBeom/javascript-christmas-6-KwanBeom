@@ -89,3 +89,48 @@ describe('주문 금액 계산 테스트', () => {
     expect(result).toBe(expected);
   });
 });
+
+describe('주문된 메뉴의 갯수 계산 테스트', () => {
+  // 메인메뉴 : 해산물파스타, 바비큐립, 티본스테이크, 크리스마스파스타
+  it.each([
+    [
+      [
+        ['해산물파스타', '2'],
+        ['바비큐립', '2'],
+        ['티본스테이크', '1'],
+        ['크리스마스파스타', '1'],
+        ['아이스크림', '1'],
+        ['초코케이크', '3'],
+        ['제로콜라', '1'],
+      ],
+      [6, 4],
+    ],
+    [
+      [
+        ['해산물파스타', '1'],
+        ['바비큐립', '2'],
+        ['티본스테이크', '1'],
+        ['크리스마스파스타', '5'],
+        ['아이스크림', '1'],
+        ['초코케이크', '1'],
+        ['제로콜라', '1'],
+        ['레드와인', '1'],
+        ['샴페인', '2'],
+      ],
+      [9, 2],
+    ],
+  ])('메인메뉴, 디저트를 n개 주문하면 메뉴의 갯수가 계산되어야 한다.', (mockInput, [mainMenuCount, dessertCount]) => {
+    const order = new Order();
+
+    // Given
+    order.addOrder(mockInput);
+
+    // When
+    const mainMenuResult = order.mainMenuCount();
+    const dessertResult = order.dessertCount();
+
+    // Then
+    expect(mainMenuResult).toBe(mainMenuCount);
+    expect(dessertResult).toBe(dessertCount);
+  });
+});
