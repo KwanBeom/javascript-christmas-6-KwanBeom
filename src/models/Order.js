@@ -5,6 +5,12 @@ import QUANTITY from '../constants/quantity';
 class Order {
   #order = new Map();
 
+  #menuDatas = {};
+
+  constructor() {
+    this.#initializeMenuDatas();
+  }
+
   isOrderPlaced() {
     return !!this.#order;
   }
@@ -15,6 +21,22 @@ class Order {
       this.#validateDuplicateMenu(menu);
       this.#order.set(menu, quantity);
     });
+  }
+
+  totalPrice() {
+    return Array.from(this.#order)
+      .reduce((total, [menu, quantity]) => (
+        total + this.#menuDatas[menu].price * quantity
+      ), 0);
+  }
+
+  #initializeMenuDatas() {
+    Object.entries(MENU)
+      .forEach(([category, categoryMenus]) => {
+        categoryMenus.forEach((menuData) => {
+          this.#menuDatas[menuData.name] = { category, price: menuData.price };
+        });
+      });
   }
 
   #validateDuplicateMenu(menu) {
