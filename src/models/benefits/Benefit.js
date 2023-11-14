@@ -1,10 +1,10 @@
-import { DISCOUNT_AMOUNT } from '../constants/amount';
-import BENEFIT_TYPE from '../constants/benefitType';
-import MENU from '../constants/menu';
-import { ERROR_MESSAGE } from '../constants/message';
-import RANGE from '../constants/range';
-import DiscountCalculator from './DiscountCalculator';
-import VisitDate from './VisitDate';
+import { DISCOUNT_AMOUNT } from '../../constants/amount';
+import BENEFIT_TYPE from '../../constants/benefitType';
+import MENU from '../../constants/menu';
+import { ERROR_MESSAGE } from '../../constants/message';
+import RANGE from '../../constants/range';
+import DiscountCalculator from '../DiscountCalculator';
+import VisitDate from '../VisitDate';
 
 class Benefit {
   #benefits = {};

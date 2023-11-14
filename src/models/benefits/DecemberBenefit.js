@@ -1,11 +1,11 @@
 import { MINIMUM_EVENT_AMOUNT } from '../../constants/amount';
 import GIFT from '../../constants/gift';
-import Benefit from '../Benefit';
+import Benefit from './Benefit';
 
 class DecemberBenefit extends Benefit {
   #christmasDdayBenefit = 0;
 
-  applyBenefit(totalPrice, mainMenuCount, dessertCount) {
+  apply(totalPrice, mainMenuCount, dessertCount) {
     if (totalPrice > MINIMUM_EVENT_AMOUNT) {
       this.#christmasDdayDiscount();
       this.weekdayDiscount(dessertCount);
