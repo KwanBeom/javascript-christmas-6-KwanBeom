@@ -6,6 +6,10 @@ const InputView = {
     const order = await Console.readLineAsync(PROMPT_MESSAGE.ORDER);
     return order;
   },
+  async askVisitDate() {
+    const visitDate = await Console.readLineAsync(PROMPT_MESSAGE.VISIT_DATE);
+    return visitDate;
+  }
 };
 
 export default InputView;
