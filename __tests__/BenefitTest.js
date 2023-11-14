@@ -1,5 +1,4 @@
-/* eslint-disable max-lines-per-function */
-import DecemberBenefit from '../src/models/decemberBenefits/DecemberBenefit';
+import DecemberBenefit from '../src/models/benefits/DecemberBenefit';
 
 describe('12월 이벤트 테스트', () => {
   // Given
@@ -13,7 +12,7 @@ describe('12월 이벤트 테스트', () => {
     const decemberBenefit = new DecemberBenefit();
     decemberBenefit.setVisitDate(visitDate);
     // when
-    decemberBenefit.applyBenefit(given.total, given.mainMenu, given.dessertMenu);
+    decemberBenefit.apply(given.total, given.mainMenu, given.dessertMenu);
 
     // then
     const benefitPrice = decemberBenefit.totalBenefitPrice();
@@ -51,7 +50,7 @@ describe('12월 이벤트 테스트', () => {
     decemberBenefit.setVisitDate(31);
 
     // when
-    decemberBenefit.applyBenefit(given.total, 0, 0);
+    decemberBenefit.apply(given.total, 0, 0);
 
     // then
     expect(decemberBenefit.giftEventPrice()).toBe(giftPrice);
@@ -69,7 +68,7 @@ describe('12월 이벤트 테스트', () => {
     decemberBenefit.setVisitDate(visitDate);
 
     // when
-    decemberBenefit.applyBenefit(given.total, 0, 0);
+    decemberBenefit.apply(given.total, 0, 0);
     const dDayDiscountPrice = decemberBenefit.dDayDiscountPrice();
 
     // then

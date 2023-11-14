@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import Order from '../src/models/Order';
 
 describe('메뉴 주문 시', () => {
