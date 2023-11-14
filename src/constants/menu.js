@@ -65,7 +65,7 @@ const MENU = {
     },
     {
       name: '샴페인',
-      key: 'SHAMPAGNE',
+      key: 'CHAMPAGNE',
       price: 25000,
     },
   ],
