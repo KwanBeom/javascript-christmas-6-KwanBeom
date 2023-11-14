@@ -12,7 +12,11 @@ class Order {
   }
 
   isOrderPlaced() {
-    return !!this.#order;
+    return !!this.#order.size;
+  }
+
+  orderDetail() {
+    return this.#order;
   }
 
   addOrder(menus) {
@@ -55,9 +59,7 @@ class Order {
   }
 
   #validateDuplicatedMenu(menu) {
-    if (this.#order.has(menu)) {
-      throw new Error(ERROR_MESSAGE.INVALID_ORDER);
-    }
+    if (this.#order.has(menu)) throw new Error(ERROR_MESSAGE.INVALID_ORDER);
   }
 
   #validateOrder(menus) {
@@ -93,22 +95,14 @@ class Order {
 
     menus.forEach((order) => {
       const menu = order[0];
-      const category = this.#findCategory(menu);
+      const { category } = this.#menuDatas[menu];
 
-      if (category) {
-        orderCategory.add(category);
-      }  
+      if (category) orderCategory.add(category);
     });
 
-    if (orderCategory.size === 1 && orderCategory.has(CATEGORY_DRINK)) throw new Error(ERROR_MESSAGE.ORDERED_ONLY_DRINK);
-  }
-
-  #findCategory(menu) {
-    const menuData = this.#menuDatas[menu];
-
-    if (menuData) {
-      return menuData.category;
-    }
+    if (orderCategory.size === 1 && orderCategory.has(CATEGORY_DRINK)) {
+      throw new Error(ERROR_MESSAGE.ORDERED_ONLY_DRINK);
+    };
   }
 }
 
