@@ -1,8 +1,8 @@
-import InputView from '../views/InputView';
-import { ERROR_MESSAGE, MESSAGE } from '../constants/message';
+import { Console } from '@woowacourse/mission-utils';
+import { ERROR_MESSAGE } from '../constants/message';
 import REGEX from '../constants/regex';
 import RANGE from '../constants/range';
-import { Console } from '@woowacourse/mission-utils';
+import InputView from '../views/InputView';
 
 class BookingController {
   constructor(order, benefit) {
@@ -11,35 +11,32 @@ class BookingController {
   }
 
   async enterVisitDate() {
-    if (this.visitDate) return;
-
-    Console.Print(MESSAGE.GREETING);
-    try {
-      const visitDateInput = await InputView.askVisitDate();
-      this.#validateVisitDateInput(visitDateInput);
-      this.visitDate = visitDateInput;
-    } catch (error) {
-      Console.print(error);
-      this.enterVisitDate();
-    }
+    do {
+      try {
+        const visitDateInput = await InputView.askVisitDate();
+        this.#validateVisitDateInput(visitDateInput);
+        this.visitDate = visitDateInput;
+      } catch (error) {
+        Console.print(error);
+      }
+    } while (!this.visitDate);
   }
 
   async orderMenu() {
-    if (this.order.isOrderPlaced()) return;
-
-    try {
-      const menuInput = await InputView.askOrder();
-      this.#validateMenuInput(menuInput);
-      this.order.addOrder(this.#parseMenuInput(menuInput));
-    } catch (error) {
-      Console.print(error);
-      this.orderMenu();
-    }
+    do {
+      try {
+        const menuInput = await InputView.askOrder();
+        this.#validateMenuInput(menuInput);
+        this.order.addOrder(this.#parseMenuInput(menuInput));
+      } catch (error) {
+        Console.print(error);
+      }
+    } while (!this.order.isOrderPlaced());
   }
 
   #validateMenuInput(input) {
     if (!REGEX.MENU_INPUT.test(input)) {
-      throw new Error(ERROR_MESSAGE.INVALID_ORDER);
+      throw ERROR_MESSAGE.INVALID_ORDER;
     }
   }
 
@@ -53,9 +50,10 @@ class BookingController {
 
   #validateVisitDateInput(input) {
     const [MONTH_START, MONTH_END] = RANGE.MONTH_DATE;
+    const visitDate = Number(input);
 
-    if (input < MONTH_START || input > MONTH_END || Number.isNaN(Number(input))) {
-      throw new Error(ERROR_MESSAGE.INVALID_DATE);
+    if (visitDate < MONTH_START || visitDate > MONTH_END || Number.isNaN(visitDate)) {
+      throw ERROR_MESSAGE.INVALID_DATE;
     }
   }
 }
