@@ -1,8 +1,11 @@
 import { Console } from '@woowacourse/mission-utils';
-import { ERROR_MESSAGE } from '../constants/message';
+import { ERROR_MESSAGE, MESSAGE } from '../constants/message';
 import REGEX from '../constants/regex';
 import RANGE from '../constants/range';
 import InputView from '../views/InputView';
+import OutputView from '../views/OutputView';
+import VisitDate from '../models/VisitDate';
+
 
 class BookingController {
   constructor(order, benefit) {
@@ -11,6 +14,8 @@ class BookingController {
   }
 
   async enterVisitDate() {
+    Console.print(MESSAGE.GREETING);
+
     do {
       try {
         const visitDateInput = await InputView.askVisitDate();
@@ -32,6 +37,23 @@ class BookingController {
         Console.print(error);
       }
     } while (!this.order.isOrderPlaced());
+  }
+
+  applyBenefit() {
+    this.benefit.setVisitDate(this.visitDate);
+    this.benefit.apply(
+      this.order.totalPrice(),
+      this.order.mainMenuCount(),
+      this.order.dessertCount(),
+    );
+  }
+
+
+  printReceipt() {
+    const totalPrice = this.order.totalPrice();
+    const orderDetail = this.order.orderDetail();
+    
+    OutputView.printReceipt(totalPrice, orderDetail, new VisitDate(this.visitDate), this.benefit);
   }
 
   #validateMenuInput(input) {
