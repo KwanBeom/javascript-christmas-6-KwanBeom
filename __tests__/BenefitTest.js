@@ -1,3 +1,4 @@
+import VisitDate from '../src/models/VisitDate';
 import DecemberBenefit from '../src/models/benefits/DecemberBenefit';
 
 describe('12월 이벤트 테스트', () => {
@@ -8,8 +9,9 @@ describe('12월 이벤트 테스트', () => {
     dessertMenu: 3,
   };
 
-  const testBenefit = (visitDate, expected) => {
+  const testBenefit = (date, expected) => {
     const decemberBenefit = new DecemberBenefit();
+    const visitDate = new VisitDate(date);
     decemberBenefit.setVisitDate(visitDate);
     // when
     decemberBenefit.apply(given.total, given.mainMenu, given.dessertMenu);
@@ -25,11 +27,9 @@ describe('12월 이벤트 테스트', () => {
   const specialDiscount = 1000; // 스페셜 할인 : 1,000원
   const giftPrice = 25000; // 증정 메뉴 가격
 
-  it.each([0, 32, 35, 50, -1])('잘못된 방문일자를 입력하면 에러가 발생한다.', (visitDate) => {
-    const decemberBenefit = new DecemberBenefit();
-
+  it.each([0, 32, 35, 50, -1])('잘못된 방문일자를 입력하면 에러가 발생한다.', (date) => {
     // when & then
-    expect(() => decemberBenefit.setVisitDate(visitDate)).toThrow('[ERROR]');
+    expect(() => new VisitDate(date)).toThrow('[ERROR]');
   });
 
   test('주말 할인 테스트', () => {
@@ -47,7 +47,7 @@ describe('12월 이벤트 테스트', () => {
   test('샴페인 증정 테스트', () => {
     given.total = 120000;
     const decemberBenefit = new DecemberBenefit();
-    decemberBenefit.setVisitDate(31);
+    decemberBenefit.setVisitDate(new VisitDate(31));
 
     // when
     decemberBenefit.apply(given.total, 0, 0);
@@ -65,7 +65,7 @@ describe('12월 이벤트 테스트', () => {
     const visitDate = 11;
     given.total = 55000;
     const decemberBenefit = new DecemberBenefit();
-    decemberBenefit.setVisitDate(visitDate);
+    decemberBenefit.setVisitDate(new VisitDate(visitDate));
 
     // when
     decemberBenefit.apply(given.total, 0, 0);

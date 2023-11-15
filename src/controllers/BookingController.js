@@ -40,7 +40,9 @@ class BookingController {
   }
 
   applyBenefit() {
-    this.benefit.setVisitDate(this.visitDate);
+    const visitDate = new VisitDate(this.visitDate);
+    
+    this.benefit.setVisitDate(visitDate);
     this.benefit.apply(
       this.order.totalPrice(),
       this.order.mainMenuCount(),

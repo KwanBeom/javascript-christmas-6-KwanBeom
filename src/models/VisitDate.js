@@ -19,6 +19,10 @@ class VisitDate {
     return this.#visitDate < date;
   }
 
+  overThan(date) {
+    return this.#visitDate > date;
+  }
+
   isWeekday() {
     return this.WEEKDAY.includes(this.dayOfWeek());
   }

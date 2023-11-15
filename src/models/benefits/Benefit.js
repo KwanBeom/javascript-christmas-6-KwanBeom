@@ -4,19 +4,18 @@ import MENU from '../../constants/menu';
 import { ERROR_MESSAGE } from '../../constants/message';
 import RANGE from '../../constants/range';
 import DiscountCalculator from '../DiscountCalculator';
-import VisitDate from '../VisitDate';
 
 class Benefit {
   #benefits = {};
 
-  setVisitDate(date) {
+  setVisitDate(visitDate) {
     const [EVENT_START, EVENT_END] = RANGE.EVENT_DATE;
 
-    if(date < EVENT_START || date > EVENT_END) {
+    if(visitDate.lessThan(EVENT_START) || visitDate.overThan(EVENT_END)) {
       throw new Error(ERROR_MESSAGE.INVALID_DATE);
     }
 
-    this.visitDate = new VisitDate(date);
+    this.visitDate =  visitDate;
   }
 
   totalBenefitPrice() {
