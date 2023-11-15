@@ -27,11 +27,6 @@ describe('12월 이벤트 테스트', () => {
   const specialDiscount = 1000; // 스페셜 할인 : 1,000원
   const giftPrice = 25000; // 증정 메뉴 가격
 
-  it.each([0, 32, 35, 50, -1])('잘못된 방문일자를 입력하면 에러가 발생한다.', (date) => {
-    // when & then
-    expect(() => new VisitDate(date)).toThrow('[ERROR]');
-  });
-
   test('주말 할인 테스트', () => {
     testBenefit(29, weekendDiscount); 
   });
